@@ -170,6 +170,38 @@
   padding-right: 2.75rem;
 }
 
+/* ----- Código OTP: 6 cuadros, uno por dígito ----- */
+.login-otp-boxes {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.login-otp-box {
+  width: 3rem;
+  height: 3.25rem;
+  text-align: center;
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-ink-950);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart);
+}
+.login-otp-box:focus {
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 4px oklch(0.672 0.168 151 / 0.12);
+}
+@media (max-width: 480px) {
+  .login-otp-boxes { gap: 0.4rem; }
+  .login-otp-box { width: 2.5rem; height: 2.9rem; font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-otp-box { transition: none; }
+}
+
 /* Botón de mostrar/ocultar contraseña */
 .login-toggle {
   position: absolute;

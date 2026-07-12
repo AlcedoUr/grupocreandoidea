@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaSpinner, FaArrowLeft, FaShieldAlt } from 'react-icons/fa';
 import { supabase } from '../supabase/client';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
+
+const OTP_LENGTH = 6;
 
 const Login = () => {
   const { marcarOtpVerificado } = useAuth();
@@ -16,9 +18,11 @@ const Login = () => {
   const [enviandoReset, setEnviandoReset] = useState(false);
   const navigate = useNavigate();
 
-  // 2FA obligatorio: 'credenciales' → 'otp' (largo del código lo decide Supabase).
+  // 2FA obligatorio: 'credenciales' → 'otp'. Código de 6 dígitos, uno por cuadro.
   const [paso, setPaso] = useState('credenciales');
-  const [otp, setOtp]   = useState('');
+  const [otpDigits, setOtpDigits] = useState(Array(OTP_LENGTH).fill(''));
+  const otp = otpDigits.join('');
+  const otpRefs = useRef([]);
 
   // Sesión con password validado pero OTP sin confirmar: se cierra y se reinicia
   // (no reenviar código automático para evitar spam de correo).
@@ -70,7 +74,8 @@ const Login = () => {
     setCargando(false);
     if (verifyError) {
       setError('Código incorrecto o vencido. Verifica tu correo e intenta de nuevo.');
-      setOtp('');
+      setOtpDigits(Array(OTP_LENGTH).fill(''));
+      otpRefs.current[0]?.focus();
       return;
     }
     marcarOtpVerificado(data?.user?.id);
@@ -92,9 +97,32 @@ const Login = () => {
     await supabase.auth.signOut();
     setPaso('credenciales');
     setPassword('');
-    setOtp('');
+    setOtpDigits(Array(OTP_LENGTH).fill(''));
     setError('');
     setMensaje('');
+  };
+
+  // Un cuadro por dígito; si llega el código completo de un tirón (autofill/paste), se reparte.
+  const handleOtpChange = (index, rawValue) => {
+    const digitsOnly = rawValue.replace(/\D/g, '');
+    if (digitsOnly.length > 1) {
+      const chars = digitsOnly.slice(0, OTP_LENGTH).split('');
+      const next = Array(OTP_LENGTH).fill('');
+      chars.forEach((c, i) => { next[i] = c; });
+      setOtpDigits(next);
+      otpRefs.current[Math.min(chars.length, OTP_LENGTH - 1)]?.focus();
+      return;
+    }
+    const next = [...otpDigits];
+    next[index] = digitsOnly;
+    setOtpDigits(next);
+    if (digitsOnly && index < OTP_LENGTH - 1) otpRefs.current[index + 1]?.focus();
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
   };
 
   // Recuperación real de contraseña vía Supabase (evita enlaces muertos).
@@ -215,23 +243,25 @@ const Login = () => {
 
               <form onSubmit={handleVerificarOtp} className="login-form">
                 <div className="login-field">
-                  <label htmlFor="otp" className="login-label">Código de verificación</label>
-                  <div className="login-input-wrap">
-                    <FaShieldAlt className="login-input-icon" aria-hidden="true" />
-                    <input
-                      id="otp"
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      maxLength={10}
-                      placeholder="Código del correo"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                      required
-                      autoFocus
-                      autoComplete="one-time-code"
-                      className="login-input"
-                    />
+                  <label className="login-label" id="otp-group-label">Código de verificación</label>
+                  <div className="login-otp-boxes" role="group" aria-labelledby="otp-group-label">
+                    {otpDigits.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={(el) => (otpRefs.current[i] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={OTP_LENGTH}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                        autoFocus={i === 0}
+                        autoComplete={i === 0 ? 'one-time-code' : 'off'}
+                        aria-label={`Dígito ${i + 1} de ${OTP_LENGTH}`}
+                        className="login-otp-box"
+                      />
+                    ))}
                   </div>
                 </div>
 
@@ -242,7 +272,7 @@ const Login = () => {
                   <p className="login-alert login-alert--success" role="status">{mensaje}</p>
                 )}
 
-                <button type="submit" disabled={cargando || otp.length < 6} className="login-btn">
+                <button type="submit" disabled={cargando || otp.length < OTP_LENGTH} className="login-btn">
                   {cargando ? (
                     <><FaSpinner className="login-spinner" /> Verificando…</>
                   ) : (
