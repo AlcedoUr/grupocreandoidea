@@ -1,0 +1,437 @@
+/* ==========================================================
+   UnidadesPanel — Editor, verificación y hoja de operario.
+   Prefijo .uni-*  |  CSS plano.
+   ========================================================== */
+
+:root {
+  --uni-brand:      var(--color-brand-500);
+  --uni-brand-dark: var(--color-brand-600);
+  --uni-ink:        var(--color-ink-950);
+  --uni-soft:       var(--color-ink-600);
+  --uni-mute:       var(--color-ink-400);
+  --uni-line:       var(--color-line);
+  --uni-surface:    var(--color-surface);
+  --uni-canvas:     var(--color-canvas);
+  --uni-sunken:     var(--color-canvas-sunken);
+  --uni-amber:      var(--color-warning);
+  --uni-red:        var(--color-danger);
+  --uni-green:      var(--color-brand-600);
+}
+
+/* ── Compartido ── */
+.uni-loading {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 2rem; color: var(--uni-mute); font-size: 0.875rem;
+}
+.uni-spin { animation: uni-spin 0.9s linear infinite; }
+@keyframes uni-spin { to { transform: rotate(360deg); } }
+
+.uni-empty-msg {
+  padding: 1.5rem 0; text-align: center;
+  color: var(--uni-mute); font-size: 0.875rem;
+}
+.uni-alert {
+  padding: 0.6rem 0.85rem; margin-bottom: 0.75rem;
+  font-size: 0.8rem; color: var(--color-danger); background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger); border-radius: 0.4rem;
+}
+
+/* Botones */
+.uni-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  font-family: inherit; font-size: 0.78rem; font-weight: 700;
+  border: 1px solid transparent; border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.uni-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.uni-btn:active:not(:disabled) { transform: scale(0.97); }
+.uni-btn--green {
+  color: #fff; background-color: var(--uni-brand); border-color: var(--uni-brand);
+}
+.uni-btn--ghost {
+  color: var(--uni-soft); background: transparent; border-color: var(--uni-line);
+}
+
+/* Inputs */
+.uni-input {
+  padding: 0.35rem 0.55rem;
+  font-family: inherit; font-size: 0.8rem;
+  color: var(--uni-ink); background: var(--uni-surface);
+  border: 1px solid var(--uni-line); border-radius: 0.35rem;
+  outline: none; width: 80px;
+  transition: border-color 0.15s var(--ease-out-quart);
+}
+.uni-input:focus { border-color: var(--uni-brand); }
+.uni-input--wide { width: 140px; }
+.uni-input--sm   { width: 55px; }
+.uni-input--nota { flex: 1; width: auto; font-size: 0.75rem; }
+
+/* Badges de estado */
+.uni-badge {
+  display: inline-block; padding: 0.15rem 0.5rem;
+  font-size: 0.65rem; font-weight: 700; border-radius: 9999px;
+  white-space: nowrap;
+}
+.uni-badge--pend  { color: var(--color-warning); background: var(--color-warning-soft); }
+.uni-badge--verif { color: var(--color-brand-700); background: var(--color-brand-50); }
+.uni-badge--stamp { color: var(--color-info); background: var(--color-info-soft); }
+
+/* Barra de progreso */
+.uni-progress-bar-wrap { margin-bottom: 1.25rem; }
+.uni-progress-labels {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.4rem; font-size: 0.78rem;
+}
+.uni-progress-label { color: var(--uni-soft); display: flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+.uni-progress-pct   { color: var(--uni-mute); }
+.uni-progress-pct--stamp { color: var(--uni-brand-dark); font-weight: 700; }
+.uni-progress-bar {
+  height: 6px; background: var(--uni-line); border-radius: 9999px; overflow: hidden;
+}
+.uni-progress-fill {
+  height: 100%; width: 100%; background: var(--uni-brand); border-radius: 9999px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease-out-quart);
+}
+.uni-progress-bar--stamp .uni-progress-fill--stamp { background: var(--color-info); }
+.uni-progress-bar-wrap--stamp .uni-progress-pct--stamp { color: var(--color-info); }
+
+/* Dot indicadores */
+.uni-dot {
+  width: 0.5rem; height: 0.5rem; border-radius: 9999px; flex-shrink: 0;
+}
+.uni-dot--pend { background: var(--uni-amber); }
+.uni-dot--ok   { background: var(--uni-brand); }
+
+/* Grupo por producto */
+.uni-grupo { margin-bottom: 1.25rem; }
+.uni-grupo__head {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0; border-bottom: 2px solid var(--uni-line);
+  margin-bottom: 0.5rem;
+}
+.uni-grupo__name { font-weight: 700; font-size: 0.875rem; color: var(--uni-ink); }
+.uni-grupo__sku  { font-size: 0.72rem; color: var(--uni-mute); background: var(--uni-sunken); padding: 0.1rem 0.4rem; border-radius: 0.25rem; }
+.uni-grupo__count { margin-left: auto; font-size: 0.72rem; color: var(--uni-mute); font-weight: 600; }
+
+/* ── Editor por ítem (dentro ModalEditor cotización) ── */
+.uni-editor-item {
+  border: 1px solid var(--uni-line); border-radius: 0.5rem; overflow: hidden;
+  margin-top: 0.25rem;
+}
+.uni-editor-toggle {
+  display: flex; align-items: center; gap: 0.6rem; width: 100%;
+  padding: 0.6rem 0.9rem;
+  font-family: inherit; font-size: 0.8rem;
+  background: var(--uni-canvas); border: none; cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s var(--ease-out-quart);
+}
+.uni-editor-toggle__name { font-weight: 700; color: var(--uni-ink); }
+.uni-editor-toggle__info { font-size: 0.72rem; color: var(--uni-mute); }
+.uni-editor-toggle__arrow {
+  margin-left: auto; font-size: 0.8rem; color: var(--uni-mute);
+  transition: transform 0.2s var(--ease-out-quart);
+}
+.uni-editor-toggle__arrow--open { transform: rotate(180deg); }
+
+.uni-editor-body { padding: 0.85rem 1rem; background: var(--uni-surface); }
+
+/* Hint cabecera de columnas */
+.uni-col-hint {
+  display: grid; grid-template-columns: 140px 55px 30px;
+  gap: 0.4rem; margin-bottom: 0.3rem;
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--uni-mute); padding: 0 0 0 1.5rem;
+}
+
+/* Filas */
+.uni-rows { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.75rem; }
+.uni-empty { font-size: 0.8rem; color: var(--uni-mute); padding: 0.5rem 0; }
+.uni-row {
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.uni-row__n {
+  width: 1.25rem; flex-shrink: 0; text-align: right;
+  font-size: 0.65rem; color: var(--uni-mute);
+}
+.uni-del-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 2.25rem; height: 2.25rem; flex-shrink: 0;
+  background: none; border: none; color: var(--uni-mute); cursor: pointer;
+  border-radius: 0.3rem; font-size: 0.72rem;
+  transition: color 0.15s var(--ease-out-quart), background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.uni-del-btn:active { transform: scale(0.9); }
+
+/* Import */
+.uni-import {
+  padding: 0.75rem; background: var(--uni-canvas);
+  border: 1px dashed var(--uni-line); border-radius: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.uni-import__hint { margin: 0 0 0.4rem; font-size: 0.72rem; color: var(--uni-soft); }
+.uni-import__ta {
+  width: 100%; padding: 0.5rem 0.65rem;
+  font-family: monospace; font-size: 0.78rem;
+  color: var(--uni-ink); background: var(--uni-surface);
+  border: 1px solid var(--uni-line); border-radius: 0.375rem;
+  outline: none; resize: vertical;
+}
+.uni-import__ta:focus { border-color: var(--uni-brand); }
+.uni-import__actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: flex-end; }
+
+.uni-editor-actions {
+  display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+}
+.uni-editor-actions__sep { flex: 1; }
+.uni-hint-save { font-size: 0.72rem; color: var(--uni-mute); font-style: italic; }
+
+/* ── Tabla de verificación ── */
+.uni-verif { }
+.uni-verif-table-wrap { overflow-x: auto; margin-bottom: 0.5rem; }
+.uni-table {
+  width: 100%; border-collapse: collapse; font-size: 0.8rem;
+}
+.uni-th {
+  padding: 0.4rem 0.6rem;
+  text-align: left; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--uni-mute); background: var(--uni-canvas);
+  border-top: 1px solid var(--uni-line); border-bottom: 1px solid var(--uni-line);
+  white-space: nowrap;
+}
+.uni-th--n    { width: 2rem; text-align: center; }
+.uni-th--wide { min-width: 130px; }
+.uni-td {
+  padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--uni-line);
+  color: var(--uni-soft); vertical-align: middle;
+}
+.uni-td--n     { text-align: center; color: var(--uni-mute); font-size: 0.72rem; }
+.uni-td--nombre { font-weight: 600; color: var(--uni-ink); }
+
+.uni-tr--pend { background: var(--color-warning-soft); }
+
+.uni-talla {
+  display: inline-block; padding: 0.1rem 0.4rem;
+  font-size: 0.72rem; font-weight: 800;
+  background: var(--uni-sunken); border-radius: 0.3rem;
+  color: var(--uni-ink);
+}
+
+/* Botón verificar */
+.uni-verif-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
+  min-height: 44px; min-width: 44px;
+  padding: 0.3rem 0.75rem;
+  font-family: inherit; font-size: 0.72rem; font-weight: 700;
+  color: var(--uni-brand-dark); background: var(--color-brand-50);
+  border: 1px solid var(--color-brand-200); border-radius: 0.35rem;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.uni-verif-btn:active:not(:disabled) { transform: scale(0.96); }
+.uni-verif-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.uni-done-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.5rem; height: 1.5rem;
+  color: var(--uni-brand); background: var(--color-brand-50); border-radius: 9999px;
+  font-size: 0.65rem;
+}
+
+/* Nota */
+.uni-nota-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 0.75rem; color: var(--uni-mute); padding: 0;
+  text-align: left; max-width: 160px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.uni-nota-btn--has { color: var(--uni-amber); font-weight: 600; }
+.uni-nota-btn:disabled { cursor: default; }
+.uni-nota-edit { display: flex; gap: 0.3rem; align-items: center; }
+.uni-nota-save {
+  background: var(--uni-brand); color: #fff; border: none;
+  border-radius: 0.3rem; padding: 0.25rem 0.45rem;
+  font-size: 0.72rem; cursor: pointer;
+}
+
+/* Pie de verificación */
+.uni-verif-foot {
+  display: flex; justify-content: flex-end;
+  padding-top: 1rem; margin-top: 0.5rem;
+  border-top: 1px solid var(--uni-line);
+}
+
+/* ── Hoja operario ── */
+.uni-hoja { }
+
+.uni-progress-bar-wrap--stamp {
+  position: sticky;
+  top: -1.25rem; /* compensa el padding del modal */
+  background: var(--uni-surface);
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--uni-line);
+  margin-top: -1.25rem;
+  z-index: var(--z-sticky);
+}
+
+.uni-hoja-warning {
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem; color: var(--color-warning); background: var(--color-warning-soft);
+  border: 1px solid var(--color-warning); border-radius: 0.5rem;
+}
+.uni-hoja-icon { margin-right: 0.3rem; }
+
+/* Grid de tarjetas de unidades */
+.uni-hoja-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.85rem; margin-bottom: 1rem;
+}
+.uni-hoja-card {
+  background: var(--uni-surface);
+  border: 2px solid var(--uni-line); border-radius: 0.75rem;
+  padding: 1.15rem 1rem;
+  display: flex; flex-direction: column; gap: 0.4rem;
+  position: relative;
+  box-shadow: var(--shadow-xs);
+}
+.uni-hoja-card__num {
+  position: absolute; top: 0.65rem; right: 0.75rem;
+  font-size: 0.7rem; color: var(--uni-mute); font-weight: 700;
+}
+.uni-hoja-card__talla {
+  font-family: "Sora", sans-serif;
+  font-size: 1.85rem; font-weight: 800; color: var(--uni-ink);
+  line-height: 1;
+}
+.uni-hoja-card__nombre {
+  font-size: 1rem; font-weight: 700; color: var(--uni-soft);
+  word-break: break-word;
+  line-height: 1.3;
+}
+.uni-hoja-card__meta { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.uni-hoja-card__sexo,
+.uni-hoja-card__tela {
+  font-size: 0.72rem; font-weight: 700; color: var(--uni-mute);
+  background: var(--uni-sunken); padding: 0.15rem 0.5rem; border-radius: 0.3rem;
+}
+
+/* Botón estampar */
+.uni-stamp-btn {
+  margin-top: 0.75rem;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 46px; /* target táctil >= 44px */
+  padding: 0.6rem;
+  font-family: inherit; font-size: 0.85rem; font-weight: 700;
+  color: #fff; background: var(--color-info);
+  border: none; border-radius: 0.5rem; cursor: pointer;
+  transition: background-color 0.2s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.uni-stamp-btn:active:not(:disabled) { transform: scale(0.97); }
+.uni-stamp-btn:disabled { background: var(--uni-mute); cursor: not-allowed; }
+
+/* Unidades ya estampadas */
+.uni-hoja-done {
+  padding: 0.65rem 0.75rem;
+  background: var(--uni-canvas); border-radius: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.uni-hoja-done__label {
+  margin: 0 0 0.4rem; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em; color: var(--uni-mute);
+}
+.uni-hoja-done__row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.uni-hoja-done__chip {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem; font-weight: 600;
+  color: var(--uni-mute); background: var(--uni-surface);
+  border: 1px solid var(--uni-line); border-radius: 9999px;
+  text-decoration: line-through;
+}
+.uni-done-icon { font-size: 0.6rem; color: var(--uni-brand); }
+
+/* ── Tabs de detalle en ModalDetalle de Pedidos ── */
+.uni-modal-tabs {
+  display: flex; border-bottom: 2px solid var(--uni-line);
+  margin: 0 -1.75rem 1.25rem; padding: 0 1.75rem;
+}
+.uni-modal-tab {
+  padding: 0.6rem 1rem;
+  font-family: inherit; font-size: 0.82rem; font-weight: 700;
+  color: var(--uni-mute); background: none; border: none;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  cursor: pointer;
+  transition: color 0.15s var(--ease-out-quart), border-color 0.15s var(--ease-out-quart);
+}
+.uni-modal-tab--on { color: var(--uni-brand); border-bottom-color: var(--uni-brand); }
+.uni-modal-tab__badge {
+  display: inline-block; margin-left: 0.35rem;
+  padding: 0 0.35rem; font-size: 0.62rem; font-weight: 800;
+  background: var(--color-danger-soft); color: var(--uni-red); border-radius: 9999px;
+}
+.uni-modal-tab__badge--ok { background: var(--color-brand-50); color: var(--uni-brand-dark); }
+
+/* Sub-tabs para admin (verificación + hoja) */
+.uni-subtabs {
+  display: flex; gap: 0.4rem; margin-bottom: 1.25rem;
+}
+.uni-subtab {
+  padding: 0.4rem 0.85rem;
+  font-family: inherit; font-size: 0.78rem; font-weight: 700;
+  color: var(--uni-soft); background: var(--uni-canvas);
+  border: 1px solid var(--uni-line); border-radius: 0.4rem;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease-out-quart), background-color 0.15s var(--ease-out-quart);
+}
+.uni-subtab--on {
+  background: var(--uni-brand); color: #fff; border-color: var(--uni-brand);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .uni-col-hint { grid-template-columns: 110px 45px 30px; }
+  .uni-input--wide { width: 110px; }
+  .uni-input--sm   { width: 45px; }
+  .uni-hoja-grid   { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .uni-modal-tabs  { margin: 0 -1.25rem 1.25rem; padding: 0 1.25rem; }
+}
+/* Hover solo en punteros finos: evita estados "pegados" en las tablets de mostrador/taller */
+@media (hover: hover) and (pointer: fine) {
+  .uni-btn--green:hover:not(:disabled) { background-color: var(--uni-brand-dark); }
+  .uni-btn--ghost:hover { background-color: var(--uni-sunken); }
+  .uni-editor-toggle:hover { background: var(--uni-sunken); }
+  .uni-modal-tab:hover { color: var(--uni-soft); }
+  .uni-verif-btn:hover:not(:disabled) { background: var(--color-brand-100); }
+  .uni-stamp-btn:hover:not(:disabled) { background: color-mix(in oklch, var(--color-info) 85%, black); }
+  .uni-del-btn:hover { color: var(--uni-red); background: var(--color-danger-soft); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uni-spin { animation-duration: 0.001ms; }
+  .uni-progress-fill, .uni-btn, .uni-verif-btn, .uni-stamp-btn { transition: none; }
+  .uni-btn:active:not(:disabled), .uni-verif-btn:active:not(:disabled),
+  .uni-stamp-btn:active:not(:disabled) { transform: none; }
+}
+
+/* ----- Kits: agrupación visual ----- */
+.uni-kit-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: var(--uni-green);
+  color: #fff;
+}
+
+.uni-grupo--kit .uni-grupo__head {
+  background: color-mix(in oklab, var(--uni-green) 5%, transparent);
+}

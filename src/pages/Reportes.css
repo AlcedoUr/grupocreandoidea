@@ -1,0 +1,230 @@
+/* ==========================================================
+   Reportes — CSS plano, tokens globales (--color-*) de index.css.
+   Paleta de 4 series validada con el script de dataviz (CVD-safe,
+   orden fijo). El ámbar queda bajo 3:1 de contraste, por eso las
+   barras SIEMPRE llevan etiqueta de valor visible, nunca dependen
+   solo del color.
+   ========================================================== */
+
+.rep {
+  --rep-series-1: var(--color-info);
+  --rep-series-2: var(--color-warning);
+  --rep-series-3: oklch(0.55 0.18 300);
+  --rep-series-4: var(--color-danger);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem 1.25rem 2.5rem;
+  font-family: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  color: var(--color-ink-600);
+}
+@media (min-width: 768px) { .rep { padding: 2rem 1.75rem 3rem; } }
+
+.rep-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.rep-head__title {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-ink-950);
+  margin: 0 0 0.35rem;
+}
+.rep-head__sub { font-size: 0.9rem; color: var(--color-ink-500); margin: 0; max-width: 46ch; }
+
+.rep-rango { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.rep-preset {
+  padding: 0.5rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-ink-600);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.rep-preset { transition: background-color 0.15s var(--ease-out-quart), color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart); }
+.rep-preset:active { transform: scale(0.96); }
+.rep-preset--on { color: var(--color-brand-700); background: var(--color-brand-50); border-color: var(--color-brand-200); }
+.rep-fecha {
+  padding: 0.45rem 0.6rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--color-ink-800);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+}
+.rep-rango__sep { color: var(--color-ink-400); }
+
+.rep-alert {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-radius: 0.5rem;
+}
+
+.rep-loading {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  height: 40vh; color: var(--color-ink-400); font-size: 1rem;
+}
+.rep-spin { animation: rep-spin 0.9s linear infinite; }
+@keyframes rep-spin { to { transform: rotate(360deg); } }
+
+/* ----- KPIs ----- */
+.rep-kpis {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 560px)  { .rep-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .rep-kpis { grid-template-columns: repeat(4, 1fr); } }
+
+.rep-kpi {
+  padding: 1.1rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.rep-kpi__k { margin: 0 0 0.4rem; font-size: 0.8rem; color: var(--color-ink-500); }
+.rep-kpi__v {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-ink-950);
+}
+.rep-kpi--devol .rep-kpi__v { font-size: 1.1rem; color: var(--color-danger); }
+.rep-kpi__v2 { margin: 0.2rem 0 0; font-size: 1rem; font-weight: 700; color: var(--color-warning); }
+.rep-kpi__hint { font-size: 0.72rem; font-weight: 600; color: var(--color-ink-400); }
+.rep-kpi__icon { margin-right: 0.3rem; color: var(--color-ink-400); }
+
+/* ----- Tabs (Ventas / Embudo) ----- */
+.rep-tabs { display: flex; gap: 0.5rem; }
+
+/* ----- Embudo: barras decrecientes ----- */
+.rep-funnel { display: flex; flex-direction: column; gap: 0.9rem; }
+.rep-funnel__row { display: grid; grid-template-columns: 6.5rem 1fr 2.5rem 3rem; align-items: center; gap: 0.75rem; }
+.rep-funnel__label { font-size: 0.82rem; font-weight: 700; color: var(--color-ink-600); }
+.rep-funnel__track { height: 1.6rem; background: var(--color-canvas-sunken); border-radius: 0.4rem; overflow: hidden; }
+.rep-funnel__fill {
+  height: 100%; width: 100%;
+  background: var(--color-brand-500);
+  border-radius: 0.4rem;
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out-quart);
+}
+.rep-funnel__valor { font-size: 0.9rem; font-weight: 800; color: var(--color-ink-900); text-align: right; }
+.rep-funnel__tasa { font-size: 0.76rem; font-weight: 700; color: var(--color-ink-400); }
+
+/* ----- Cards ----- */
+.rep-card {
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.rep-card__title {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-ink-800);
+}
+.rep-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 0.75rem;
+}
+.rep-card__head .rep-card__title { margin: 0; }
+.rep-empty { color: var(--color-ink-400); font-size: 0.85rem; margin: 0; }
+
+.rep-export, .rep-retry {
+  padding: 0.35rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-ink-600);
+  background: var(--color-canvas-sunken);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.rep-export:active, .rep-retry:active { transform: scale(0.96); }
+.rep-retry { margin-left: 0.75rem; color: var(--color-danger); background: transparent; border-color: currentColor; }
+
+/* Tablas anchas: scroll horizontal en vez de desbordar en mobile */
+.rep-card:has(> table.rep-table) { overflow-x: auto; }
+
+.rep-grid2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 900px) { .rep-grid2 { grid-template-columns: 1fr 1fr; } }
+
+.rep-tooltip {
+  padding: 0.5rem 0.7rem;
+  background: var(--color-ink-950);
+  color: var(--color-surface);
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+}
+.rep-tooltip__k { margin: 0 0 0.15rem; opacity: 0.7; }
+.rep-tooltip__v { margin: 0; font-weight: 800; }
+
+/* ----- Servicios vs productos: barra de proporción 100% ----- */
+.rep-propbar__track {
+  display: flex;
+  height: 1.6rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--color-canvas-sunken);
+}
+.rep-propbar__seg { height: 100%; }
+.rep-propbar__seg--a { background: var(--rep-series-1); margin-right: 2px; }
+.rep-propbar__seg--b { background: var(--rep-series-2); }
+.rep-propbar__legend { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 0.75rem; }
+.rep-propbar__item { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--color-ink-600); }
+.rep-propbar__dot { width: 0.6rem; height: 0.6rem; border-radius: 999px; display: inline-block; }
+.rep-propbar__dot--a { background: var(--rep-series-1); }
+.rep-propbar__dot--b { background: var(--rep-series-2); }
+
+/* ----- Tablas top productos/clientes ----- */
+.rep-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.rep-table th {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-400);
+  border-bottom: 1px solid var(--color-line);
+}
+.rep-table td {
+  padding: 0.5rem 0.5rem;
+  color: var(--color-ink-700);
+  border-bottom: 1px solid var(--color-canvas-sunken);
+}
+.rep-th--num { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (hover: hover) and (pointer: fine) {
+  .rep-preset:hover:not(.rep-preset--on) { background: var(--color-canvas-sunken); }
+  .rep-export:hover { background: var(--color-line); }
+  .rep-retry:hover { background: var(--color-danger-soft); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep-spin { animation-duration: 0.001ms; }
+  .rep-funnel__fill, .rep-preset, .rep-export, .rep-retry { transition: none; }
+  .rep-preset:active, .rep-export:active, .rep-retry:active { transform: none; }
+}

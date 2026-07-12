@@ -1,0 +1,352 @@
+/* ==========================================================
+   Detalle de producto — vitrina pura, sin carrito.
+   Paleta verde Creando Ideas + neutros. Tipografía Sora + Hanken.
+   ========================================================== */
+
+.pd-page {
+  min-height: 100vh;
+  background-color: var(--color-canvas);
+  font-family: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  color: var(--color-ink-600);
+  padding: 2rem 1.25rem 4rem;
+}
+.pd-container { max-width: 1180px; margin: 0 auto; }
+
+/* Estados de carga / error */
+.pd-state {
+  display: flex;
+  align-items: center; justify-content: center;
+  min-height: 60vh;
+  font-size: 1rem; color: var(--color-ink-500);
+}
+.pd-state--error { color: var(--color-danger); }
+
+/* ----- Volver ----- */
+.pd-back {
+  display: inline-flex;
+  align-items: center; gap: 0.5rem;
+  background: none; border: none; padding: 0.5rem 0;
+  margin-bottom: 1.25rem;
+  font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  color: var(--color-ink-600); cursor: pointer;
+  transition: color 0.2s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.pd-back:active { transform: scale(0.97); }
+
+/* ----- Breadcrumb ----- */
+.pd-crumbs {
+  display: flex; flex-wrap: wrap;
+  align-items: center; gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem; color: var(--color-ink-500);
+}
+.pd-crumbs__link {
+  color: var(--color-ink-500); text-decoration: none;
+  transition: color 0.2s var(--ease-out-quart);
+}
+.pd-crumbs__sep { font-size: 0.65rem; color: var(--color-line-strong); }
+.pd-crumbs__current { color: var(--color-ink-800); font-weight: 600; }
+
+/* ==========================================================================
+   Layout principal: galería | info
+   ========================================================================== */
+.pd-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  background-color: #ffffff;
+  border: 1px solid var(--color-line);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  box-shadow: 0 14px 40px oklch(0.205 0.012 153 / 0.05);
+}
+@media (min-width: 900px) {
+  .pd-layout { grid-template-columns: 1fr 1fr; gap: 3rem; padding: 2.25rem; }
+}
+
+/* ==========================================================================
+   Galería
+   ========================================================================== */
+.pd-media { display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* Imagen principal */
+.pd-media__main {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background-color: var(--color-canvas-sunken);
+  border: 1px solid var(--color-line);
+}
+.pd-media__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-media__noimg {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-ink-500);
+}
+
+/* Badges sobre imagen */
+.pd-badge {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  border-radius: 999px;
+}
+.pd-badge--featured {
+  left: 1rem; bottom: 1rem;
+  color: #ffffff; background-color: var(--color-brand-500);
+  box-shadow: 0 4px 12px oklch(0.672 0.168 151 / 0.35);
+}
+.pd-badge--perso {
+  right: 1rem; bottom: 1rem;
+  color: var(--color-warning); background-color: var(--color-warning-soft);
+}
+
+/* Miniaturas — fila horizontal debajo de la imagen principal */
+.pd-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.pd-thumb {
+  width: 64px; height: 64px;
+  padding: 0; background: none;
+  border: 2px solid var(--color-line);
+  border-radius: 0.65rem; overflow: hidden;
+  cursor: pointer; flex-shrink: 0;
+  transition: border-color 0.15s var(--ease-out-quart), transform 0.15s var(--ease-out-quart);
+}
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-thumb:active { transform: scale(0.94); }
+.pd-thumb.is-active { border-color: var(--color-brand-500); }
+
+/* ==========================================================================
+   Info
+   ========================================================================== */
+.pd-info { display: flex; flex-direction: column; }
+
+.pd-categoria {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--color-brand-600);
+}
+.pd-titulo {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 2rem; font-weight: 700;
+  letter-spacing: -0.02em; line-height: 1.15;
+  color: #14201b; margin: 0 0 0.75rem;
+}
+.pd-desc {
+  font-size: 0.95rem; line-height: 1.65;
+  color: var(--color-ink-500); margin: 0 0 1.5rem;
+}
+
+/* ----- Precio desde ----- */
+.pd-precio {
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.pd-precio__num-wrap {
+  display: flex; align-items: baseline; gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+.pd-precio__desde {
+  font-size: 0.8rem; font-weight: 500; color: var(--color-ink-500);
+}
+.pd-precio__num {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 2.2rem; font-weight: 700;
+  letter-spacing: -0.02em; color: #14201b;
+}
+.pd-precio__nota {
+  margin: 0;
+  font-size: 0.8rem; color: var(--color-ink-500); line-height: 1.4;
+}
+.pd-precio__consult {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.3rem; font-weight: 600; color: var(--color-ink-500);
+}
+
+/* ----- Atributos informativos ----- */
+.pd-atributos {
+  display: flex; flex-direction: column; gap: 0.55rem;
+  padding: 1rem 1.15rem;
+  background-color: var(--color-canvas);
+  border-radius: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+.pd-atributo { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; }
+.pd-atributo__clave {
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-ink-800); flex-shrink: 0;
+}
+.pd-atributo__clave::after { content: ':'; }
+.pd-atributo__vals { font-size: 0.875rem; color: var(--color-ink-600); }
+
+/* ----- Nota personalizable ----- */
+.pd-perso-note {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  background-color: var(--color-warning-soft);
+  border: 1px solid color-mix(in oklch, var(--color-warning) 35%, transparent);
+  border-radius: 0.85rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem; color: var(--color-warning); line-height: 1.5;
+}
+.pd-perso-note__icon { flex-shrink: 0; margin-top: 0.2rem; }
+.pd-perso-note p { margin: 0; }
+
+/* ----- CTA WhatsApp ----- */
+.pd-cta-wa {
+  display: flex; align-items: center; justify-content: center; gap: 0.65rem;
+  width: 100%; padding: 1.05rem 1.5rem;
+  margin-top: auto;
+  font-family: inherit; font-size: 1.05rem; font-weight: 700;
+  color: #ffffff; background-color: var(--color-brand-500);
+  border-radius: 999px; text-decoration: none;
+  box-shadow: 0 6px 20px oklch(0.672 0.168 151 / 0.35);
+  transition: background-color 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart), transform 0.15s var(--ease-out-quart);
+}
+.pd-cta-wa:active { transform: scale(0.99); }
+.pd-cta-wa--disabled {
+  background-color: var(--color-ink-500);
+  box-shadow: none;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.pd-cta-hint {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.78rem; color: var(--color-ink-500);
+}
+
+/* ----- Selector de variantes ----- */
+.pd-variantes { margin-bottom: 1.5rem; }
+.pd-var-grupo + .pd-var-grupo { margin-top: 1rem; }
+.pd-variantes__title {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-ink-800);
+}
+/* Etiquetas (chips) por valor de atributo, no una lista vertical de combinaciones completas */
+.pd-variantes__list { display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+.pd-var {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  font-family: inherit; font-size: 0.85rem; font-weight: 600; text-align: center;
+  color: var(--color-ink-800); background-color: var(--color-canvas);
+  border: 1.5px solid var(--color-line); border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease-out-quart), background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.pd-var:active { transform: scale(0.97); }
+.pd-var.is-active { border-color: var(--color-brand-500); background-color: var(--color-brand-50); color: var(--color-brand-700); }
+.pd-var--agotada { opacity: 0.6; }
+.pd-var:disabled { opacity: 0.4; cursor: not-allowed; }
+.pd-var__attrs { flex: 1; }
+.pd-var__meta { display: inline-flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+.pd-var__price { font-weight: 700; }
+.pd-var__stock {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  color: #ffffff; background-color: var(--color-ink-500);
+  border-radius: 999px;
+}
+.pd-var__aviso {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem; color: var(--color-warning);
+}
+
+/* ----- Selector de cantidad ----- */
+.pd-cantidad {
+  display: flex; align-items: center; gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+.pd-cantidad__label { font-size: 0.875rem; font-weight: 600; color: var(--color-ink-800); }
+.pd-cantidad__ctrl {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  border: 1.5px solid var(--color-line-strong); border-radius: 999px;
+  padding: 0.2rem;
+}
+.pd-cantidad__ctrl button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem;
+  font-size: 0.7rem; color: var(--color-ink-800);
+  background: none; border: none; border-radius: 999px; cursor: pointer;
+  transition: background-color 0.15s var(--ease-out-quart), color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.pd-cantidad__ctrl button:active { transform: scale(0.92); }
+.pd-cantidad__num {
+  min-width: 2rem; text-align: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+.pd-cta-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ==========================================================================
+   Responsive / accesibilidad
+   ========================================================================== */
+@media (max-width: 767px) {
+  .pd-cta-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--color-line);
+    padding: 0.75rem 1rem;
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    box-shadow: 0 -4px 16px oklch(0.205 0.012 153 / 0.06);
+  }
+  .pd-cta-wa {
+    margin-top: 0 !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.85rem !important;
+    flex: 1;
+    justify-content: center;
+    border-radius: 999px;
+  }
+  .pd-page {
+    padding-bottom: 7rem !important;
+  }
+}
+@media (max-width: 560px) {
+  .pd-titulo { font-size: 1.6rem; }
+}
+/* Hover solo en dispositivos con puntero fino: evita estados "pegados" en touch */
+@media (hover: hover) and (pointer: fine) {
+  .pd-crumbs__link:hover { color: var(--color-brand-600); }
+  .pd-thumb:hover { transform: translateY(-2px); border-color: var(--color-brand-200); }
+  .pd-cta-wa:not(.pd-cta-wa--disabled):hover {
+    background-color: var(--color-brand-600);
+    box-shadow: 0 10px 28px oklch(0.672 0.168 151 / 0.45);
+    transform: translateY(-1px);
+  }
+  .pd-var:hover { border-color: var(--color-line-strong); }
+  .pd-cantidad__ctrl button:hover { background-color: var(--color-brand-50); color: var(--color-brand-500); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pd-thumb, .pd-cta-wa, .pd-back, .pd-var, .pd-cantidad__ctrl button { transition: none; }
+  .pd-thumb:active, .pd-cta-wa:active, .pd-back:active,
+  .pd-var:active, .pd-cantidad__ctrl button:active { transform: none; }
+}

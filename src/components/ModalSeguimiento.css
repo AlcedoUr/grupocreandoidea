@@ -1,0 +1,90 @@
+/* ==========================================================================
+   ModalSeguimiento — modal compartido para programar seguimientos comerciales
+   (bandeja de solicitudes, cotización abierta, ficha del cliente).
+   ========================================================================== */
+
+.segm-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20, 32, 27, 0.45);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.segm-dialog {
+  width: 100%; max-width: 30rem;
+  background: #ffffff;
+  border-radius: 0.9rem;
+  box-shadow: 0 20px 50px rgba(20, 32, 27, 0.25);
+  overflow: hidden;
+}
+.segm-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #e7ebe8;
+}
+.segm-title {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: "Sora", "Hanken Grotesk", sans-serif;
+  font-size: 1rem; font-weight: 800; color: #14201b;
+}
+.segm-close {
+  border: none; background: transparent; color: #8a938d;
+  font-size: 1rem; cursor: pointer; padding: 0.3rem;
+  border-radius: 0.4rem; transition: background-color 0.15s ease;
+}
+.segm-close:hover { background: #eef1ef; color: #14201b; }
+
+.segm-body { display: flex; flex-direction: column; gap: 0.9rem; padding: 1.25rem; }
+
+.segm-contexto {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  background: #eef1ef; border-radius: 0.55rem;
+  font-size: 0.8rem; color: #515b55; font-weight: 600;
+}
+.segm-cliente-fijo {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9rem; font-weight: 700; color: #14201b;
+}
+
+.segm-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.segm-label {
+  display: flex; flex-direction: column; gap: 0.3rem;
+  font-size: 0.76rem; font-weight: 700; color: #515b55;
+}
+.segm-input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #e7ebe8; border-radius: 0.5rem;
+  font-size: 0.85rem; color: #14201b; background: #ffffff;
+  font-family: inherit;
+}
+.segm-input:focus { outline: 2px solid #00a838; outline-offset: -1px; }
+.segm-input--area { resize: vertical; }
+
+.segm-error {
+  font-size: 0.8rem; color: #b3261e;
+  background: #fbeceb; border-radius: 0.5rem; padding: 0.5rem 0.7rem;
+}
+
+.segm-foot { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 0.3rem; }
+.segm-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid #e7ebe8; border-radius: 0.55rem;
+  background: #ffffff; color: #515b55;
+  font-size: 0.83rem; font-weight: 700; cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.segm-btn:hover { background: #eef1ef; }
+.segm-btn--primary { background: #00a838; border-color: #00a838; color: #fff; }
+.segm-btn--primary:hover { background: #008c2f; }
+.segm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.segm-spin { animation: segm-spin 0.8s linear infinite; }
+@keyframes segm-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .segm-spin { animation-duration: 0.001ms; }
+}
+
+@media (max-width: 480px) {
+  .segm-grid2 { grid-template-columns: 1fr; }
+}

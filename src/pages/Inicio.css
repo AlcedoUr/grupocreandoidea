@@ -1,0 +1,542 @@
+/* ==========================================================
+   Dashboard / Inicio (panel de rendimiento) — CSS plano.
+   Tokens de index.css (color, tipografía). El shell (sidebar/
+   topbar) lo aporta Dashboard.jsx; aquí va el lienzo principal.
+   ========================================================== */
+
+.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.75rem 1.25rem 2.5rem;
+  font-family: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  color: var(--color-ink-600);
+}
+@media (min-width: 768px) { .dash { padding: 2rem 1.75rem 3rem; } }
+
+/* ----- Encabezado ----- */
+.dash-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.dash-head__title {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-ink-950);
+  margin: 0 0 0.35rem;
+}
+.dash-head__sub { font-size: 0.95rem; color: var(--color-ink-500); margin: 0; }
+.dash-head__date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink-800);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+}
+
+/* ----- Banner de error de carga (distinto de los estados vacíos) ----- */
+.dash-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background-color: var(--color-danger-soft);
+  border: 1px solid oklch(0.586 0.205 27 / 0.3);
+  border-radius: var(--radius-md);
+  color: oklch(0.40 0.12 27);
+}
+.dash-error-banner__icon { flex-shrink: 0; color: var(--color-danger); font-size: 1.05rem; }
+.dash-error-banner__text { flex: 1; margin: 0; font-size: 0.88rem; font-weight: 600; }
+.dash-error-banner__retry {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   Grid de KPIs
+   ========================================================================== */
+.dash-kpis {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 560px) { .dash-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .dash-kpis { grid-template-columns: repeat(4, 1fr); } }
+
+.dash-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(20, 32, 27, 0.04);
+  transition: border-color 0.2s var(--ease-out-quart), transform 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dash-kpi:hover {
+    border-color: var(--color-brand-200);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 168, 56, 0.08);
+  }
+  .dash-kpi:hover .dash-kpi__arrow { color: var(--color-brand-600); transform: translateX(2px); }
+}
+.dash-kpi:active { transform: scale(0.98); }
+.dash-kpi__top { display: flex; align-items: center; justify-content: space-between; }
+.dash-kpi__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem; height: 2.75rem;
+  font-size: 1.15rem;
+  border-radius: 0.85rem;
+}
+.dash-kpi__icon--brand { color: var(--color-brand-600); background-color: var(--color-brand-50); }
+.dash-kpi__icon--warn  { color: var(--color-warning); background-color: var(--color-warning-soft); }
+.dash-kpi__icon--info  { color: var(--color-info); background-color: var(--color-info-soft); }
+.dash-kpi__icon--ink   { color: var(--color-ink-600); background-color: var(--color-canvas-sunken); }
+.dash-kpi__arrow {
+  color: var(--color-ink-300);
+  transition: transform 0.2s var(--ease-out-quart), color 0.2s var(--ease-out-quart);
+}
+.dash-kpi__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-500);
+  margin: 0 0 0.2rem;
+}
+.dash-kpi__value {
+  font-family: "Sora", sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-950);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Grid medio (Top 5 | Cierre de caja)
+   ========================================================================== */
+.dash-mid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 1000px) { .dash-mid { grid-template-columns: 1.6fr 1fr; align-items: start; } }
+
+.dash-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(20, 32, 27, 0.04);
+  overflow: hidden;
+}
+.dash-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.dash-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-ink-950);
+  margin: 0;
+}
+.dash-card__title svg { color: var(--color-brand-600); }
+.dash-card__link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-brand-600);
+  text-decoration: none;
+}
+.dash-card__link:hover { text-decoration: underline; }
+
+/* ----- Top 5 más vendidos ----- */
+.dash-top { display: flex; flex-direction: column; }
+.dash-top__row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--color-canvas-sunken);
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border-left: none; border-right: none; border-top: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 0.2s var(--ease-out-quart), transform 0.15s var(--ease-out-quart);
+}
+.dash-top__row:last-child { border-bottom: none; }
+@media (hover: hover) and (pointer: fine) {
+  .dash-top__row:hover { background-color: var(--color-canvas-sunken); }
+}
+.dash-top__row:active { transform: scale(0.98); }
+.dash-top__rank {
+  flex-shrink: 0;
+  width: 1.6rem;
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-ink-300);
+  text-align: center;
+}
+.dash-top__rank--1 { color: var(--color-brand-500); }
+.dash-top__thumb {
+  flex-shrink: 0;
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background-color: var(--color-canvas-sunken);
+  display: flex; align-items: center; justify-content: center;
+}
+.dash-top__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.dash-top__thumb-no { font-size: 0.9rem; color: var(--color-ink-500); }
+.dash-top__info { flex: 1; min-width: 0; }
+.dash-top__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink-800);
+  margin: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dash-top__meta { font-size: 0.75rem; color: var(--color-ink-500); margin: 0.1rem 0 0; }
+.dash-top__price {
+  flex-shrink: 0;
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-ink-950);
+}
+/* Tamaño compacto del badge-status global (index.css) para esta fila angosta */
+.dash-top__badge {
+  flex-shrink: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ----- Cierre de caja ----- */
+.dash-caja { padding: 1.25rem; }
+.dash-caja__total {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-950);
+  margin: 0;
+}
+.dash-caja__total-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-500);
+  margin: 0 0 0.2rem;
+}
+.dash-caja__list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+.dash-caja__item-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.dash-caja__metodo { font-size: 0.85rem; font-weight: 600; color: var(--color-ink-800); text-transform: capitalize; }
+.dash-caja__monto { font-size: 0.85rem; font-weight: 600; color: var(--color-ink-500); font-variant-numeric: tabular-nums; }
+.dash-caja__bar {
+  width: 100%; height: 0.5rem;
+  background-color: var(--color-canvas-sunken);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dash-caja__fill {
+  height: 100%;
+  background-color: var(--color-brand-500);
+  border-radius: 999px;
+}
+.dash-caja__empty {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-ink-500);
+  padding: 1.5rem 0 0.5rem;
+}
+
+/* ==========================================================================
+   Actividad reciente (últimos pedidos)
+   ========================================================================== */
+.dash-feed { display: flex; flex-direction: column; }
+.dash-feed__row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--color-canvas-sunken);
+}
+.dash-feed__row:last-child { border-bottom: none; }
+.dash-feed__icon {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  font-size: 1rem;
+  color: var(--color-brand-600);
+  background-color: var(--color-brand-50);
+  border-radius: 999px;
+}
+.dash-feed__main { flex: 1; min-width: 0; }
+.dash-feed__text { font-size: 0.9rem; color: var(--color-ink-800); margin: 0; }
+.dash-feed__text strong { color: var(--color-ink-950); }
+.dash-feed__time { font-size: 0.75rem; color: var(--color-ink-500); margin: 0.1rem 0 0; }
+.dash-feed__state {
+  flex-shrink: 0;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  border-radius: 999px;
+  color: var(--color-ink-600);
+  background-color: var(--color-canvas-sunken);
+}
+.dash-feed__state--pendiente { color: oklch(0.48 0.13 75); background-color: var(--color-warning-soft); }
+.dash-feed__state--listo,
+.dash-feed__state--entregado { color: var(--color-brand-600); background-color: var(--color-brand-50); }
+
+/* ----- Pendientes de hoy (seguimientos + solicitudes sin atender) ----- */
+.dash-pend-list { display: flex; flex-direction: column; }
+.dash-pend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.7rem 0.25rem;
+  border: none;
+  border-bottom: 1px solid var(--color-canvas-sunken);
+  background: transparent;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 0.15s var(--ease-out-quart), transform 0.15s var(--ease-out-quart);
+}
+.dash-pend-row:last-child { border-bottom: none; }
+.dash-pend-row--vencido { background-color: var(--color-danger-soft); }
+.dash-pend-row:active { transform: scale(0.98); }
+@media (hover: hover) and (pointer: fine) {
+  .dash-pend-row:hover { background-color: var(--color-canvas-sunken); }
+  .dash-pend-row--vencido:hover { background-color: oklch(0.92 0.04 27); }
+}
+.dash-pend-row__alerta { flex-shrink: 0; color: var(--color-danger); font-size: 0.85rem; }
+.dash-pend-row__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.dash-pend-row__titulo {
+  font-size: 0.85rem; font-weight: 700; color: var(--color-ink-950);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dash-pend-row__nota {
+  font-size: 0.78rem; color: var(--color-ink-500);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dash-pend-row__hora { flex-shrink: 0; font-size: 0.75rem; font-weight: 600; color: var(--color-ink-500); }
+
+/* Estado vacío genérico */
+.dash-empty {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-ink-500);
+  padding: 2rem 1.25rem;
+}
+
+/* ----- Skeleton ----- */
+.dash-skel {
+  background-color: var(--color-canvas-sunken);
+  border-radius: 0.4rem;
+  animation: dash-pulse 1.4s ease-in-out infinite;
+}
+.dash-skel--kpi { height: 6.5rem; border-radius: 1rem; }
+.dash-skel--row { height: 2.75rem; border-radius: var(--radius-sm); }
+.dash-skel-list { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.25rem; }
+@keyframes dash-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-kpi, .dash-kpi__arrow, .dash-top__row, .dash-pend-row, .dash-skel, .dash-wip__bar { transition: none; animation: none; }
+}
+
+/* ==========================================================================
+   Sección de KPIs de producción
+   ========================================================================== */
+
+/* WIP por etapa */
+.dash-wip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.25rem;
+}
+.dash-wip__row {
+  display: grid;
+  grid-template-columns: 6rem 1fr 2rem;
+  align-items: center;
+  gap: 0.65rem;
+}
+.dash-wip__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-ink-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-wip__bar-wrap {
+  height: 0.5rem;
+  background-color: var(--color-canvas-sunken);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dash-wip__bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+.dash-wip__count {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--color-ink-950);
+  text-align: right;
+}
+
+/* Métricas de entrega */
+.dash-metricas {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+.dash-metrica__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-ink-500);
+  margin: 0 0 0.3rem;
+}
+.dash-metrica__val { margin: 0; }
+.dash-metrica__big {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-600);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.dash-metrica__unit {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-ink-500);
+}
+.dash-metrica__na {
+  font-size: 0.82rem;
+  color: var(--color-ink-500);
+  font-style: italic;
+}
+
+/* Atrasados */
+.dash-atrasados {
+  background-color: var(--color-danger-soft);
+  border: 1px solid oklch(0.586 0.205 27 / 0.3);
+  border-radius: 0.65rem;
+  padding: 0.75rem;
+}
+.dash-atrasados__title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-danger);
+}
+.dash-atrasados__list { display: flex; flex-direction: column; gap: 0.35rem; }
+.dash-atrasados__row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.75rem;
+}
+.dash-atrasados__id { font-weight: 800; color: var(--color-danger); }
+.dash-atrasados__cli {
+  color: var(--color-ink-800);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-atrasados__fecha { color: var(--color-ink-500); white-space: nowrap; }
+
+/* Throughput semanal — separado del bloque de cumplimiento/atrasados de arriba */
+.dash-throughput {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+}
+.dash-throughput__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-ink-500);
+  margin: 0 0 0.5rem;
+}
+.dash-throughput__weeks {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.dash-throughput__week {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  flex: 1;
+  background-color: var(--color-canvas-sunken);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.25rem;
+}
+.dash-throughput__cnt {
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-ink-950);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.dash-throughput__sem {
+  font-size: 0.62rem;
+  color: var(--color-ink-500);
+  font-weight: 600;
+}

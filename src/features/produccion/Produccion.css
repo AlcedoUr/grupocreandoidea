@@ -1,0 +1,191 @@
+/* ----- Modal de detalle -----
+   Extraído de Pedidos.css. `.ped-dialog__close` y `.ped-muted` se quedaron
+   allá porque el Kanban también las usa; el resto es exclusivo de
+   ModalDetalle/SeccionDevoluciones/SeccionAvisoCliente. Usa los tokens
+   --ped-* de :root en Pedidos.css, que ya está cargado por Pedidos.jsx. */
+.ped-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  overflow-y: auto;
+  background-color: rgba(20, 32, 27, 0.55);
+  backdrop-filter: blur(2px);
+}
+.ped-dialog {
+  width: 100%;
+  max-width: 680px;
+  background-color: var(--ped-surface);
+  border-radius: 0.875rem;
+  box-shadow: 0 20px 60px rgba(20, 32, 27, 0.25);
+  padding: 1.75rem;
+}
+.ped-dialog__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+.ped-dialog__title {
+  margin: 0 0 0.4rem;
+  font-family: "Sora", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ped-ink);
+}
+
+.ped-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.ped-badge {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+.ped-badge--neutral { color: var(--ped-soft); background-color: var(--ped-sunken); }
+.ped-badge.ped-pago--pend { color: #856404; background-color: #fff3cd; }
+.ped-badge.ped-pago--adel { color: #0c5460; background-color: #d1ecf1; }
+.ped-badge.ped-pago--full { color: #155724; background-color: #d4edda; }
+
+.ped-info {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  background-color: var(--ped-canvas);
+  border-radius: 0.625rem;
+}
+.ped-info__k { margin: 0 0 0.15rem; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ped-mute); }
+.ped-info__v { margin: 0; color: var(--ped-ink); font-size: 0.9rem; }
+.ped-strong { font-weight: 700; }
+.ped-total { font-weight: 800; font-size: 1.1rem; color: var(--ped-brand-dark); font-variant-numeric: tabular-nums; }
+
+.ped-section {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--ped-ink);
+  border-bottom: 2px solid var(--ped-line);
+}
+.ped-items { display: flex; flex-direction: column; gap: 1rem; }
+.ped-item { border: 1px solid var(--ped-line); border-radius: 0.625rem; padding: 1rem; }
+.ped-item__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.65rem; }
+.ped-item__id { display: flex; gap: 0.75rem; align-items: center; }
+.ped-item__img { width: 46px; height: 46px; object-fit: cover; border-radius: 0.4rem; border: 1px solid var(--ped-line); }
+.ped-item__name { margin: 0 0 0.2rem; font-weight: 700; color: var(--ped-ink); display: flex; align-items: center; gap: 0.5rem; }
+.ped-tag-costura { font-size: 0.62rem; font-weight: 700; color: #1565c0; background-color: #e3f2fd; padding: 0.05rem 0.4rem; border-radius: 0.3rem; }
+.ped-item__qty { margin: 0; font-size: 0.8rem; color: var(--ped-mute); }
+.ped-item__sub { margin: 0; font-weight: 800; color: var(--ped-brand-dark); }
+
+.ped-item__perso { background-color: var(--ped-canvas); border-radius: 0.4rem; padding: 0.65rem; margin-top: 0.5rem; }
+.ped-item__perso-k { margin: 0 0 0.4rem; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ped-mute); }
+
+.ped-center { text-align: center; }
+.ped-perso-table-wrap { overflow-x: auto; }
+.ped-perso-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.ped-perso-table th { padding: 0.3rem 0.5rem; text-align: left; text-transform: capitalize; color: var(--ped-soft); font-weight: 700; background-color: var(--ped-sunken); }
+.ped-perso-table td { padding: 0.3rem 0.5rem; color: var(--ped-ink); border-bottom: 1px solid var(--ped-line); }
+
+.ped-chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.ped-chip { background-color: #e6f7eb; color: var(--ped-brand-dark); padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-size: 0.7rem; font-weight: 700; }
+
+.ped-notas { margin-top: 1rem; padding: 0.85rem; background-color: #fffbf0; border: 1px solid #ffe082; border-radius: 0.5rem; }
+.ped-notas__k { margin: 0 0 0.25rem; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #856404; }
+.ped-notas__v { margin: 0; font-size: 0.875rem; color: var(--ped-soft); }
+
+/* Fecha en modal detalle */
+.ped-dialog__boleta {
+  margin-left: 0.6rem;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ped-mute);
+  background-color: var(--ped-sunken);
+  border-radius: 0.4rem;
+  font-family: "Hanken Grotesk", monospace;
+  vertical-align: middle;
+}
+.ped-date--late { color: #dc2626; font-weight: 700; }
+.ped-date--hoy  { color: #b45309; font-weight: 700; }
+
+/* ----- Primitivas de mini-formulario compartidas por Devoluciones y el aviso de WhatsApp
+   (nombre "ped-consumo" quedó de Consumo de Materiales, ya retirado, pero siguen en uso real) ----- */
+.ped-consumo__input {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--ped-border, #cbd5e1);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  min-width: 0;
+}
+
+.ped-consumo__input--qty { width: 6rem; }
+
+.ped-consumo__btn,
+.ped-consumo__open {
+  padding: 0.42rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--ped-green);
+  color: #fff;
+  transition: transform 0.1s var(--ease-out-quart);
+}
+.ped-consumo__btn:active,
+.ped-consumo__open:active { transform: scale(0.96); }
+
+.ped-consumo__open {
+  background: transparent;
+  color: var(--ped-green);
+  border: 1px dashed currentColor;
+}
+
+.ped-consumo__error {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  color: #b91c1c;
+}
+
+/* ----- Devoluciones (solo pedidos entregados) ----- */
+.ped-dev { margin-top: 1.25rem; }
+.ped-dev__list { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.6rem; }
+.ped-dev__row {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.9rem;
+  padding: 0.5rem 0.7rem;
+  background: #f6f8f7; border-radius: 0.5rem;
+  font-size: 0.78rem; color: #515b55;
+}
+.ped-dev__motivo { font-weight: 700; color: #14201b; }
+.ped-dev__monto { color: #b3261e; }
+.ped-dev__fecha { margin-left: auto; color: #8a938d; }
+.ped-dev__form { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.4rem; }
+.ped-dev__item {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #e7ebe8; border-radius: 0.5rem;
+}
+.ped-dev__item-name { font-size: 0.8rem; font-weight: 600; color: #14201b; flex: 1 1 10rem; }
+.ped-dev__check {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.76rem; color: #515b55; cursor: pointer;
+}
+.ped-dev__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; }
+
+.ped-dev__efecto { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ped-dev__radio {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.78rem; color: #515b55;
+  background: #f6f8f7;
+  border: 1px solid #e7ebe8; border-radius: 0.5rem;
+  cursor: pointer;
+}
+.ped-dev__radio--on { border-color: var(--ped-brand); color: var(--ped-ink); background: #e6f7eb; }
+.ped-dev__radio--disabled { opacity: 0.55; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ped-consumo__btn, .ped-consumo__open { transition: none; }
+  .ped-consumo__btn:active, .ped-consumo__open:active { transform: none; }
+}

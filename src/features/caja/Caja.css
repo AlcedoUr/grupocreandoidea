@@ -1,0 +1,148 @@
+/* ----- Caja (arqueo diario) -----
+   Extraído de Pedidos.css. Usa los tokens --ped-* de :root en Pedidos.css;
+   CajaPanel solo se renderiza dentro de Pedidos.jsx, que ya carga esa hoja. */
+.ped-caja { max-width: 720px; }
+
+.ped-caja__filtros { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+.ped-caja__select, .ped-caja__fecha {
+  padding: 0.55rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--ped-ink);
+  background-color: var(--ped-surface);
+  border: 1px solid var(--ped-line);
+  border-radius: 0.5rem;
+}
+
+.ped-caja__alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-danger);
+  background-color: var(--color-danger-soft);
+  border-radius: var(--radius-sm);
+}
+.ped-caja__alert .ped-dialog__close { flex-shrink: 0; width: 1.5rem; height: 1.5rem; color: inherit; }
+
+.ped-caja__resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+.ped-caja__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem;
+  background-color: var(--ped-surface);
+  border: 1px solid var(--ped-line);
+  border-radius: 0.625rem;
+  box-shadow: 0 2px 8px rgba(20, 32, 27, 0.05);
+}
+.ped-caja__card-label { font-size: 0.72rem; font-weight: 700; color: var(--ped-mute); text-transform: uppercase; letter-spacing: 0.02em; }
+.ped-caja__card-sistema { font-family: "Sora", sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--ped-ink); }
+.ped-caja__card-input {
+  padding: 0.4rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: var(--ped-ink);
+  background-color: var(--ped-canvas);
+  border: 1px solid var(--ped-line);
+  border-radius: 0.4rem;
+}
+.ped-caja__card-input:disabled { opacity: 0.6; }
+.ped-caja__card-dif { font-size: 0.75rem; font-weight: 700; color: var(--ped-brand-dark); }
+.ped-caja__card-dif--off { color: #b45309; }
+
+.ped-caja__totales {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--ped-soft);
+  background-color: var(--ped-canvas);
+  border-radius: 0.625rem;
+}
+.ped-caja__totales strong { color: var(--ped-ink); }
+
+.ped-caja__cierre { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.75rem; }
+.ped-caja__notas {
+  min-height: 4.5rem;
+  padding: 0.65rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--ped-ink);
+  background-color: var(--ped-surface);
+  border: 1px solid var(--ped-line);
+  border-radius: 0.5rem;
+  resize: vertical;
+}
+.ped-caja__btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--ped-brand);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease-out-quart), transform 0.1s var(--ease-out-quart);
+}
+.ped-caja__btn:active:not(:disabled) { transform: scale(0.97); }
+.ped-caja__btn:disabled { opacity: 0.6; cursor: default; }
+
+.ped-caja__cerrado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ped-brand-dark);
+  background-color: #e6f7eb;
+  border-radius: 0.625rem;
+}
+.ped-caja__notas-txt { font-weight: 400; color: var(--ped-soft); font-style: italic; }
+
+.ped-caja__hist-title {
+  margin: 0 0 0.75rem;
+  font-family: "Sora", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ped-ink);
+}
+.ped-caja__hist { display: flex; flex-direction: column; gap: 0.5rem; }
+.ped-caja__hist-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  background-color: var(--ped-surface);
+  border: 1px solid var(--ped-line);
+  border-radius: 0.5rem;
+}
+.ped-caja__hist-fecha { color: var(--ped-soft); font-weight: 600; }
+.ped-caja__hist-dif { color: var(--ped-brand-dark); font-weight: 700; }
+.ped-caja__hist-dif--off { color: #b45309; }
+
+/* Hover solo en dispositivos con puntero fino: evita estados "pegados" en touch */
+@media (hover: hover) and (pointer: fine) {
+  .ped-caja__btn:hover:not(:disabled) { background-color: var(--ped-brand-dark); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ped-caja__btn { transition: none; }
+  .ped-caja__btn:active:not(:disabled) { transform: none; }
+}
