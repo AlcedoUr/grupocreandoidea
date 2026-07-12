@@ -177,7 +177,9 @@
   justify-content: center;
 }
 .login-otp-box {
-  width: 3rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 3rem;
   height: 3.25rem;
   text-align: center;
   font-family: "Sora", "Segoe UI", system-ui, sans-serif;
@@ -196,7 +198,7 @@
 }
 @media (max-width: 480px) {
   .login-otp-boxes { gap: 0.4rem; }
-  .login-otp-box { width: 2.5rem; height: 2.9rem; font-size: 1.15rem; }
+  .login-otp-box { height: 2.9rem; font-size: 1.15rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .login-otp-box { transition: none; }
